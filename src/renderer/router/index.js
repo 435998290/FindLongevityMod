@@ -7,12 +7,17 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      name: 'mainPage',
+      component: require('@/components/mainPage/mainPage').default
     },
     {
       path: '*',
       redirect: '/'
+    },
+    {
+      path: '/changeFileData',
+      name: 'changeFileData',
+      component: require('@/components/changeFileData/changeFileData').default
     }
   ]
 })

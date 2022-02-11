@@ -1,0 +1,13 @@
+@font-face {
+    font-family: dragon;
+    src: url("/static/font/dragon.ttf");
+  }
+@font-face {
+    font-family: sword;
+    src: url("/static/font/sword.ttf");
+  }
+
+.text-button {
+    font-family: "sword";
+    font-size: 24px;
+  }
