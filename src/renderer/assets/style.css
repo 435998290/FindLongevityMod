@@ -10,4 +10,15 @@
 .text-button {
     font-family: "sword";
     font-size: 24px;
+    cursor: pointer;
   }
+body {
+  margin: 0;
+}
+.select-radio {
+  font-family: "sword";
+  font-size: 24px;
+}
+ul::-webkit-scrollbar {
+  display: none;
+}

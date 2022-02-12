@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="home-page">
-    <div></div>
+    <div class="header">觅长生修改工具</div>
     <router-view>
     </router-view>
   </div>
@@ -12,13 +12,23 @@
   }
 </script>
 
-<style>
+<style scoped>
 /* CSS */
 /* CSS */
+
+.header {
+  margin-top: -50px;
+  font-family: "dragon";
+  font-size: 50px;
+}
 .home-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-image: url("/static/imgs/background.png");
+  background-size: 1000px 563px;
   height: 100vh;
 }
-body {
-  margin: 0;
-}
+
 </style>

@@ -18,6 +18,16 @@ export default new Router({
       path: '/changeFileData',
       name: 'changeFileData',
       component: require('@/components/changeFileData/changeFileData').default
+    },
+    {
+      path: '/selectFile',
+      name: 'selectFile',
+      component: require('@/components/changeFileData/selectFile/selectFile').default
+    },
+    {
+      path: '/changeCharacterData',
+      name: 'changeCharacterData',
+      component: require('@/components/changeFileData/changeCharacterData/changeCharacterData').default
     }
   ]
 })
