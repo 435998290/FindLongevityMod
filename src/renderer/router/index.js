@@ -28,6 +28,11 @@ export default new Router({
       path: '/changeCharacterData',
       name: 'changeCharacterData',
       component: require('@/components/changeFileData/changeCharacterData/changeCharacterData').default
+    },
+    {
+      path: '/notice',
+      name: 'notice',
+      component: require('@/components/notice/notice').default
     }
   ]
 })

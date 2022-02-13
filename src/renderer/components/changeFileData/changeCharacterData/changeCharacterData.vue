@@ -50,10 +50,18 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="悟性">
-          <div class="label-value">{{ fileData.wuXin }}</div>
+          <div class="label-value">{{ fileData.wuXing }}</div>
           <el-input
             type="number"
-            v-model="form.wuXin"
+            v-model="form.wuXing"
+            style="width: 80px"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="悟道点">
+          <div class="label-value">{{ fileData.wuDaoDian }}</div>
+          <el-input
+            type="number"
+            v-model="form.wuDaoDian"
             style="width: 80px"
           ></el-input>
         </el-form-item>
@@ -62,6 +70,14 @@
           <el-input
             type="number"
             v-model="form.ziZhi"
+            style="width: 80px"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="丹毒">
+          <div class="label-value">{{ fileData.danDu }}</div>
+          <el-input
+            type="number"
+            v-model="form.danDu"
             style="width: 80px"
           ></el-input>
         </el-form-item>
@@ -131,17 +147,18 @@ export default {
         {
           flag: 'wx+'
         }
-      )
+      )// 创建一个备用文件，防止修改出现问题无法回滚
       keys.forEach((item) => {
         const userItemKey = `${key}.${keyMap[item]}`
         if (userItem[userItemKey]) {
-          console.log(userItemKey)
           userItem[userItemKey] = this.form[item]
         }
-      })
+      })// 把改动的数据写入存档对象内
       fs.writeFileSync(path.join(home, filePath), JSON.stringify(userItem), {
         flag: 'w+'
-      })
+      })// 修改存档数据
+      this.fileData = fetchFileData(this.key)
+      this.form = { ...this.fileData }
     }
   }
 }
@@ -152,31 +169,22 @@ function fetchFileData(fileKey) {
   const nameKey = `${key}.name` // 获取名称key
   const levelKey = `${key}.level` // 获取境界key
   const timeKey = `${key}.worldTimeMag.nowTime` // 获取时间key
-  const money = `${key}.money` // 获取金钱key
-  const liveTime = `${key}.shouYuan` // 获取寿元key
-  const HPMax = `${key}._HP_Max` // 获取血量上限key
-  const dunSu = `${key}._dunSu` // 获取遁速key
-  const ziZhi = `${key}.ZiZhi` // 获取资质key
-  const wuXin = `${key}.wuXin` // 获取悟性key
-  const shenShi = `${key}._shengShi` // 获取神识key
   const filePath = `${dirPath}/${key}.sav`
   const userFile = fs.readFileSync(path.join(home, filePath), 'utf-8') // 读取文件数据
   userItem = JSON.parse(userFile)
   const time = userItem[timeKey].split(' ')[0].split('/') // 获取年月日信息
-  return {
+  const fileDataResult = {
     key: key,
     index: index,
     name: userItem[nameKey],
     level: getLevelStr(userItem[levelKey] - 1),
-    time: `${Number(time[0])}年${time[1]}月${time[2]}日`,
-    money: userItem[money],
-    liveTime: userItem[liveTime],
-    HPMax: userItem[HPMax],
-    dunSu: userItem[dunSu],
-    ziZhi: userItem[ziZhi],
-    wuXin: userItem[wuXin],
-    shenShi: userItem[shenShi]
+    time: `${Number(time[0])}年${time[1]}月${time[2]}日`
   }
+  Object.keys(keyMap).forEach((item) => {
+    const itemKey = `${key}.${keyMap[item]}`
+    fileDataResult[item] = userItem[itemKey]
+  })
+  return fileDataResult
 }
 /**
  * 获取存档境界

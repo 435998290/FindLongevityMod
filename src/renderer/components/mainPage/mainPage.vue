@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <div v-on:click="changeFileData" class="text-button">修改存档</div>
+    <div v-on:click="toNotice" class="text-button">关于修改器</div>
+    <div class="text-button">开发中</div>
   </div>
 </template>
 
@@ -10,6 +12,9 @@
     methods: {
       changeFileData: function() {
         this.$router.push('/changeFileData')
+      },
+      toNotice: function() {
+        this.$router.push('/notice')
       }
     }
   }
@@ -28,6 +33,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   width: 800px;
   height: 394px;
   background:rgba(253, 252, 252, 0.5);
