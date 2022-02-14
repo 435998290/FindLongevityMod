@@ -1,10 +1,10 @@
 @font-face {
     font-family: dragon;
-    src: url("/static/font/dragon.ttf");
+    src: url("./font/dragon.ttf");
   }
 @font-face {
     font-family: sword;
-    src: url("/static/font/sword.ttf");
+    src: url("./font/sword.ttf");
   }
 
 .text-button {
@@ -18,7 +18,4 @@ body {
 .select-radio {
   font-family: "sword";
   font-size: 24px;
-}
-ul::-webkit-scrollbar {
-  display: none;
 }

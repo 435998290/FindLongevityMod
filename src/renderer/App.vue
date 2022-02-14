@@ -33,7 +33,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-image: url("/static/imgs/background.png");
+  background-image: url("./assets/imgs/background.png");
   background-size: 1005px 563px;
   height: 100vh;
 }

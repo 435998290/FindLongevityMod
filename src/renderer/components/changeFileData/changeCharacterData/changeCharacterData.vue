@@ -147,16 +147,16 @@ export default {
         {
           flag: 'wx+'
         }
-      )// 创建一个备用文件，防止修改出现问题无法回滚
+      ) // 创建一个备用文件，防止修改出现问题无法回滚
       keys.forEach((item) => {
         const userItemKey = `${key}.${keyMap[item]}`
         if (userItem[userItemKey]) {
-          userItem[userItemKey] = this.form[item]
+          userItem[userItemKey] = Number(this.form[item])
         }
-      })// 把改动的数据写入存档对象内
+      }) // 把改动的数据写入存档对象内
       fs.writeFileSync(path.join(home, filePath), JSON.stringify(userItem), {
         flag: 'w+'
-      })// 修改存档数据
+      }) // 修改存档数据
       this.fileData = fetchFileData(this.key)
       this.form = { ...this.fileData }
     }
