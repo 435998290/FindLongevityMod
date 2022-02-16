@@ -6,6 +6,7 @@
         正式版
         <el-switch
           v-model="isTest"
+          @change="switchVersion"
           active-color="#303133"
           inactive-color="#303133"
         >
@@ -14,35 +15,26 @@
       </div>
        <div v-on:click="searchData" class="text-button">选择存档</div>
        <div v-on:click="changeCharacter" class="text-button">修改人物属性</div>
+        <div v-on:click="addMedicine" class="text-button">修改背包物品</div>
       <div v-on:click="back" class="text-button">返回</div>
     </div>
   </div>
 </template>
 
 <script>
-let character
-let isTest
 export default {
   name: 'changeFileData',
-  beforeRouteEnter(to, from, next) {
-    isTest = from.params.isTest
-    if (from.path === '/selectFile') {
-      character = from.params.character
-    }
-    next()
-  },
   data: function () {
     return {
       notice: '',
       character: '',
-      isTest: false
+      isTest: this.$root.isTest
     }
   },
   created: function () {
-    this.character = character
-    this.isTest = isTest === 'true'
+    this.character = this.$root.character
     this.notice = this.character
-      ? `当前存档为${character.name} ${this.character.level} ${this.character.time}`
+      ? `当前存档为${this.character.name} ${this.character.level} ${this.character.time}`
       : '请选择要修改的存档'
   },
   methods: {
@@ -50,10 +42,18 @@ export default {
       this.$router.back()
     },
     searchData: function () {
-      this.$router.push(`/selectFile?isTest=${this.isTest}`)
+      this.$router.push(`/selectFile`)
     },
     changeCharacter: function () {
-      this.$router.push(`/changeCharacterData?isTest=${this.isTest}&key=${this.character.key}`)
+      this.$router.push(`/changeCharacterData`)
+    },
+    addMedicine: function () {
+      this.$router.push(`/addMedicine`)
+    },
+    switchVersion: function (e) {
+      this.$root.isTest = e
+      this.$root.fileDir = e ? `${this.$root.fileDir}test` : this.$root.fileDir.slice(0, -4)
+      console.log(this.$root.fileDir)
     }
   }
 }

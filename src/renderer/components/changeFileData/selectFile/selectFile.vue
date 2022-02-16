@@ -24,34 +24,23 @@
 
 <script>
 const fs = require('fs')
-const os = require('os')
-const path = require('path')
-const home = os.homedir()
 const { LevelMap, LevelProgressMap } = require('../const')
-let dirPath = '/AppData/LocalLow/yusuiInc/觅长生'
-
 export default {
   name: 'selectFile',
   created: function () {
-    this.isTest = this.$route.query.isTest
-    dirPath = `/AppData/LocalLow/yusuiInc/觅长生${
-      this.isTest === 'true' ? 'test' : ''
-    }`
-    this.fileList = processUserFile(getUserFile())
+    this.fileList = processUserFile(getUserFile(this.$root.fileDir), this.$root.fileDir)
   },
   data: function () {
     return {
-      fileList: [],
-      isTest: false
+      fileList: []
     }
   },
   methods: {
     back: function () {
-      this.$route.params.isTest = this.isTest
       this.$router.back()
     },
     chooseFile: function (e) {
-      this.$route.params.character = e
+      this.$root.character = e
       this.back()
     }
   }
@@ -60,8 +49,8 @@ export default {
  * 获取用户存档
  * @return 用户存档列表
  */
-function getUserFile() {
-  return fs.readdirSync(path.join(home, dirPath), 'utf-8').filter((item) => {
+function getUserFile(fileDir) {
+  return fs.readdirSync(fileDir, 'utf-8').filter((item) => {
     const rule = /^Avatar[0-9]*_[0-9]*.sav/
     return rule.test(item)
   })
@@ -70,15 +59,15 @@ function getUserFile() {
  * 处理存档信息，返回存档数据列表
  * @return {name, level}
  */
-function processUserFile(userFileList) {
+function processUserFile(userFileList, fileDir) {
   const userList = userFileList.map((item) => {
     const key = item.split('.')[0] // 存档key
     const index = item.split('_')[0].slice(6) // 获取存档编号
     const nameKey = `${key}.name` // 获取名称key
     const levelKey = `${key}.level` // 获取境界key
     const timeKey = `${key}.worldTimeMag.nowTime` // 获取时间key
-    const filePath = `${dirPath}/${item}`
-    const userFile = fs.readFileSync(path.join(home, filePath), 'utf-8') // 读取文件数据
+    const filePath = `${fileDir}/${item}`
+    const userFile = fs.readFileSync(filePath, 'utf-8') // 读取文件数据
     const userItem = JSON.parse(userFile)
     const time = userItem[timeKey].split(' ')[0].split('/') // 获取年月日信息
 

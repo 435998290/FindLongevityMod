@@ -90,24 +90,15 @@
 
 <script>
 const fs = require('fs')
-const os = require('os')
-const path = require('path')
 const { keyMap } = require('./const')
-const home = os.homedir()
 const { LevelMap, LevelProgressMap } = require('../const')
-let dirPath = '/AppData/LocalLow/yusuiInc/觅长生'
-let spareDir = '/AppData/LocalLow/yusuiInc/觅长生Spare'
 let userItem = {}
 
 export default {
   name: 'changeCharacterData',
   created: function () {
-    this.isTest = this.$route.query.isTest
-    this.key = this.$route.query.key
-    dirPath = `/AppData/LocalLow/yusuiInc/觅长生${
-      this.isTest === 'true' ? 'test' : ''
-    }`
-    this.fileData = fetchFileData(this.key)
+    this.key = this.$root.character.key
+    this.fileData = fetchFileData(this.key, this.$root.fileDir)
     this.notice = this.fileData.name
       ? `当前存档为${this.fileData.name} ${this.fileData.level} ${this.fileData.time}`
       : '请选择要修改的存档'
@@ -116,7 +107,7 @@ export default {
   data: function () {
     return {
       fileList: [],
-      isTest: false,
+      isTest: this.$root.isTest,
       fileData: {},
       key: '',
       notice: '',
@@ -134,43 +125,41 @@ export default {
     },
     submit: function () {
       const key = this.key.split('.')[0] // 存档key
-      const filePath = `${dirPath}/${key}.sav`
+      const fileKey = key.slice(6) // 存档index
+      const filePath = `${this.$root.fileDir}/${key}.sav`
       const time = getTime()
-      const sparePath = `${spareDir}/${key}_${time}.sav`
+      const spareDir = `${this.$root.fileDir}_spare`
+      const sparePath = `${spareDir}/${fileKey}_${time}.sav`
       const keys = Object.keys(keyMap) // 存档Json文件key
-      if (!fs.existsSync(path.join(home, spareDir))) {
-        fs.mkdir(path.join(home, spareDir))
+      if (!fs.existsSync(spareDir)) {
+        fs.mkdir(spareDir)
       }
-      fs.writeFileSync(
-        path.join(home, sparePath),
-        JSON.stringify({ ...userItem }),
-        {
-          flag: 'wx+'
-        }
-      ) // 创建一个备用文件，防止修改出现问题无法回滚
+      fs.writeFileSync(sparePath, JSON.stringify({ ...userItem }), {
+        flag: 'wx+'
+      }) // 创建一个备用文件，防止修改出现问题无法回滚
       keys.forEach((item) => {
         const userItemKey = `${key}.${keyMap[item]}`
         if (userItem[userItemKey]) {
           userItem[userItemKey] = Number(this.form[item])
         }
       }) // 把改动的数据写入存档对象内
-      fs.writeFileSync(path.join(home, filePath), JSON.stringify(userItem), {
+      fs.writeFileSync(filePath, JSON.stringify(userItem), {
         flag: 'w+'
       }) // 修改存档数据
-      this.fileData = fetchFileData(this.key)
+      this.fileData = fetchFileData(this.key, this.$root.fileDir)
       this.form = { ...this.fileData }
     }
   }
 }
 
-function fetchFileData(fileKey) {
+function fetchFileData(fileKey, dirPath) {
   const key = fileKey.split('.')[0] // 存档key
-  const index = fileKey.split('_')[0].slice(6) // 获取存档编号
+  const index = key.slice(6) // 获取存档编号
   const nameKey = `${key}.name` // 获取名称key
   const levelKey = `${key}.level` // 获取境界key
   const timeKey = `${key}.worldTimeMag.nowTime` // 获取时间key
   const filePath = `${dirPath}/${key}.sav`
-  const userFile = fs.readFileSync(path.join(home, filePath), 'utf-8') // 读取文件数据
+  const userFile = fs.readFileSync(filePath, 'utf-8') // 读取文件数据
   userItem = JSON.parse(userFile)
   const time = userItem[timeKey].split(' ')[0].split('/') // 获取年月日信息
   const fileDataResult = {
@@ -199,7 +188,7 @@ function getTime() {
   const myHour = myDate.getHours() // 获取当前小时数(0-23)
   const myMinute = myDate.getMinutes() // 获取当前分钟数(0-59)
   const mySecond = myDate.getSeconds() // 获取当前秒数(0-59)
-  return `${myHour}${myMinute}${mySecond}`
+  return `${myHour}h${myMinute}m${mySecond}s`
 }
 </script>
 
