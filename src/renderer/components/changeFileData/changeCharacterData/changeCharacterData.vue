@@ -97,6 +97,10 @@ let userItem = {}
 export default {
   name: 'changeCharacterData',
   created: function () {
+    if (!this.$root.character.key) {
+      this.$message.error('请先选择存档!!!')
+      return
+    }
     this.key = this.$root.character.key
     this.fileData = fetchFileData(this.key, this.$root.fileDir)
     this.notice = this.fileData.name

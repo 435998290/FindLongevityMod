@@ -35,9 +35,9 @@ export default new Router({
       component: require('@/components/notice/notice').default
     },
     {
-      path: '/addMedicine',
-      name: 'addMedicine',
-      component: require('@/components/changeFileData/addItems/addMedicine/addMedicine').default
+      path: '/addItem',
+      name: 'addItem',
+      component: require('@/components/changeFileData/addItems/index').default
     }
   ]
 })

@@ -21,7 +21,9 @@ new Vue({
   router,
   data: function() {
     return {
+      gameRoot: '',
       fileDir: path.join(home, '/AppData/LocalLow/yusuiInc/觅长生'),
+      jsonDataDir: path.join(home, '/AppData/LocalLow/yusuiInc/jsonData'),
       isTest: false,
       character: {}
     }

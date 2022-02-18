@@ -33,7 +33,7 @@ export default {
   },
   created: function () {
     this.character = this.$root.character
-    this.notice = this.character
+    this.notice = this.character.name
       ? `当前存档为${this.character.name} ${this.character.level} ${this.character.time}`
       : '请选择要修改的存档'
   },
@@ -48,7 +48,7 @@ export default {
       this.$router.push(`/changeCharacterData`)
     },
     addMedicine: function () {
-      this.$router.push(`/addMedicine`)
+      this.$router.push(`/addItem`)
     },
     switchVersion: function (e) {
       this.$root.isTest = e
